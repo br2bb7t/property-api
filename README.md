@@ -20,8 +20,26 @@ Primero, clona el repositorio del proyecto en tu máquina local:
 git clone https://github.com/tu_usuario/property-api.git
 cd property-api
 ```
+### 2. Limpiar, restaurar y construir el proyecto
+Para cada proyecto dentro de la solución, realiza los siguientes pasos:
 
-### 4. Construir y Levantar los Contenedores
+## Limpiar los archivos generados anteriormente
+
+```bash
+dotnet clean
+```
+## Restaurar las dependencias del proyecto
+
+```bash
+dotnet restore
+```
+## Construir el proyecto
+
+```bash
+dotnet build
+```
+
+### 3. Construir y Levantar los Contenedores
 Para construir las imagenes y levantar los contenedores, ejecuta:
 
 ```bash
@@ -30,7 +48,21 @@ docker-compose up --build
 
 Una vez que los contenedores estén en ejecución, el API estará disponible en http://localhost:5000 (puedes verificar la disponibilidad de Swagger en http://localhost:5000/swagger).
 
-## 5. Validar las Colecciones de MongoDB con mongosh
+### Ejemplo de curl
+Puedes usar el siguiente comando curl desde Postman para hacer una solicitud a la API con los filtros de name, address, minPrice y maxPrice:
+
+```bash
+curl --location 'http://localhost:5000/api/properties?name=Casa&address=Playa&minPrice=200000&maxPrice=400000' \
+--header 'accept: application/json'
+```
+Este comando hace una solicitud GET a la ruta /api/properties con los parámetros de consulta para filtrar las propiedades según el nombre, dirección y rango de precios.
+
+- **name=Casa** filtra las propiedades cuyo nombre contenga "Casa".
+- **address=Playa** filtra las propiedades cuyo campo de dirección contenga "Playa".
+- **minPrice=200000** establece un precio mínimo de 200,000.
+- **maxPrice=400000** establece un precio máximo de 400,000.
+
+## 4. Validar las Colecciones de MongoDB con mongosh
 Para verificar las colecciones dentro de MongoDB, puedes usar el contenedor de mongosh.
 
 ### Acceder al Contenedor de MongoDB
