@@ -15,7 +15,7 @@ namespace PropertyAPI.API.Controllers
             _getPropertiesUseCase = getPropertiesUseCase;
         }
 
-        [HttpGet] // Este es el endpoint GET
+        [HttpGet]
         public async Task<IActionResult> GetProperties([FromQuery] string name, [FromQuery] string address, [FromQuery] decimal? minPrice, [FromQuery] decimal? maxPrice)
         {
             var properties = await _getPropertiesUseCase.ExecuteAsync(name, address, minPrice, maxPrice);
