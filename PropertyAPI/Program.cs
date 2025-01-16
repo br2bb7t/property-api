@@ -5,6 +5,18 @@ using PropertyAPI.Core.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Habilitar CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()  // Permitir cualquier origen
+              .AllowAnyMethod()  // Permitir cualquier método HTTP
+              .AllowAnyHeader(); // Permitir cualquier cabecera
+    });
+});
+
+
 // Agregar controladores
 builder.Services.AddControllers();
 
@@ -12,21 +24,21 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
 {
     // Se obtiene la cadena de conexión desde el archivo de configuración
-    var connectionString = builder.Configuration.GetConnectionString("MongoDb") ?? "mongodb://localhost:27017"; // Definir un valor por defecto
+    var connectionString = builder.Configuration.GetConnectionString("MongoDb") ?? "mongodb://localhost:27017";
     return new MongoClient(connectionString);
 });
 
 builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
 {
     var client = serviceProvider.GetRequiredService<IMongoClient>();
-    return client.GetDatabase("PropertyDB");  // Asegúrate de que este sea el nombre de tu base de datos
+    return client.GetDatabase("PropertyDB");
 });
 
-// Agregar servicio de siembra de datos
+// Agregar datos de prueba
 builder.Services.AddSingleton<MongoDataSeeder>();
 
 // Configurar Swagger
-builder.Services.AddEndpointsApiExplorer();  // Necesario para la exploración de endpoints
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -51,13 +63,15 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
+app.UseCors("AllowAll");  // Usar la política de CORS definida
+
 app.UseSwagger();  // Habilitar el middleware de Swagger
 app.UseSwaggerUI();  // Habilitar la interfaz de usuario de Swagger
 
 // Redirigir al Swagger
 app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();
 
-// Ejecutar el servicio de siembra de datos
+// Inicializar la base de datos
 using (var scope = app.Services.CreateScope())
 {
     var seeder = scope.ServiceProvider.GetRequiredService<MongoDataSeeder>();
