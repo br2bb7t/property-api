@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:8080"
+    environment:
+      - MONGO_CONNECTION_STRING=mongodb://mongo:27017
+    depends_on:
+      - mongo
+    restart: always
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  mongosh:
+    image: mongo:latest
+    command: mongosh --host mongo
+    depends_on:
+      - mongo
+    stdin_open: true
+    tty: true
+    environment:
+      - MONGO_CONNECTION_STRING=mongodb://mongo:27017
+
+volumes:
+  mongo-data:
