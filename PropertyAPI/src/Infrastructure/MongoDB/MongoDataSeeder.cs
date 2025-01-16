@@ -21,61 +21,187 @@ public class MongoDataSeeder
         // Insertar propietarios de prueba si la colección está vacía
         if (await _owners.CountDocumentsAsync(FilterDefinition<Owner>.Empty) == 0)
         {
-            // Crear un propietario de prueba
-            var owner = new Owner
+            // Datos de prueba para propietarios
+            var owners = new List<Owner>
             {
-                Name = "Juan Pérez",
-                Address = "Calle Ficticia 123",
-                Birthday = DateTime.Parse("1985-05-20"),
-                Photo = "photo_url_example",
+                new Owner
+                {
+                    Name = "Juan Pérez",
+                    Address = "Calle Ficticia 123",
+                    Birthday = DateTime.Parse("1985-05-20"),
+                    Photo = "photo_url_example_1"
+                },
+                new Owner
+                {
+                    Name = "Maria García",
+                    Address = "Avenida Real 456",
+                    Birthday = DateTime.Parse("1990-08-15"),
+                    Photo = "photo_url_example_2"
+                },
+                new Owner
+                {
+                    Name = "Carlos López",
+                    Address = "Calle Falsa 789",
+                    Birthday = DateTime.Parse("1982-11-30"),
+                    Photo = "photo_url_example_3"
+                },
+                new Owner
+                {
+                    Name = "Ana Torres",
+                    Address = "Calle de los Olivos 321",
+                    Birthday = DateTime.Parse("1975-02-25"),
+                    Photo = "photo_url_example_4"
+                },
+                new Owner
+                {
+                    Name = "Luis Fernández",
+                    Address = "Calle Nueva 654",
+                    Birthday = DateTime.Parse("1988-06-05"),
+                    Photo = "photo_url_example_5"
+                }
             };
 
-            // Insertar el propietario
-            await _owners.InsertOneAsync(owner);
+            // Insertar propietarios
+            await _owners.InsertManyAsync(owners);
 
-            // Obtener el Id generado automáticamente del propietario insertado
-            var ownerId = owner.IdOwner;
-
-            // Insertar una propiedad asociada a este propietario
-            var property = new Property
+            // Insertar propiedades asociadas a los propietarios
+            var properties = new List<Property>
             {
-                Name = "Casa en la playa",
-                Address = "Playa Ficticia 456",
-                Price = 300000,
-                CodeInternal = "CP12345",
-                Year = 2020,
-                IdOwner = ownerId  // Asignar el IdOwner correctamente
+                new Property
+                {
+                    Name = "Casa en la playa",
+                    Address = "Playa Ficticia 456",
+                    Price = 300000,
+                    CodeInternal = "CP12345",
+                    Year = 2020,
+                    IdOwner = owners[0].IdOwner
+                },
+                new Property
+                {
+                    Name = "Apartamento en la ciudad",
+                    Address = "Centro Ciudad 789",
+                    Price = 150000,
+                    CodeInternal = "AP54321",
+                    Year = 2018,
+                    IdOwner = owners[1].IdOwner
+                },
+                new Property
+                {
+                    Name = "Villa de lujo",
+                    Address = "Calle de las Palmeras 123",
+                    Price = 500000,
+                    CodeInternal = "VL67890",
+                    Year = 2022,
+                    IdOwner = owners[2].IdOwner
+                },
+                new Property
+                {
+                    Name = "Casa rústica",
+                    Address = "Campo 101",
+                    Price = 200000,
+                    CodeInternal = "CR11223",
+                    Year = 2015,
+                    IdOwner = owners[3].IdOwner
+                },
+                new Property
+                {
+                    Name = "Piso moderno",
+                    Address = "Zona Industrial 456",
+                    Price = 180000,
+                    CodeInternal = "PM22334",
+                    Year = 2019,
+                    IdOwner = owners[4].IdOwner
+                }
             };
 
-            // Insertar la propiedad
-            await _properties.InsertOneAsync(property);
+            // Insertar propiedades
+            await _properties.InsertManyAsync(properties);
 
-            // Obtener el Id de la propiedad recién insertada
-            var propertyId = property.IdProperty;
-
-            // Insertar imágenes de prueba relacionadas con esta propiedad
-            var propertyImage = new PropertyImage
+            // Insertar imágenes y trazas de prueba relacionadas con estas propiedades
+            var propertyImages = new List<PropertyImage>
             {
-                IdProperty = propertyId,  // Asociar la imagen a la propiedad
-                File = "image_url_example",
-                Enabled = true
+                new PropertyImage
+                {
+                    IdProperty = properties[0].IdProperty,
+                    File = "image_url_example_1",
+                    Enabled = true
+                },
+                new PropertyImage
+                {
+                    IdProperty = properties[1].IdProperty,
+                    File = "image_url_example_2",
+                    Enabled = true
+                },
+                new PropertyImage
+                {
+                    IdProperty = properties[2].IdProperty,
+                    File = "image_url_example_3",
+                    Enabled = true
+                },
+                new PropertyImage
+                {
+                    IdProperty = properties[3].IdProperty,
+                    File = "image_url_example_4",
+                    Enabled = true
+                },
+                new PropertyImage
+                {
+                    IdProperty = properties[4].IdProperty,
+                    File = "image_url_example_5",
+                    Enabled = true
+                }
             };
 
-            // Insertar la imagen
-            await _propertyImages.InsertOneAsync(propertyImage);
+            // Insertar imágenes
+            await _propertyImages.InsertManyAsync(propertyImages);
 
-            // Insertar un trace (historial de la propiedad) de prueba relacionado con la propiedad
-            var propertyTrace = new PropertyTrace
+            // Insertar trazas de prueba relacionadas con estas propiedades
+            var propertyTraces = new List<PropertyTrace>
             {
-                IdProperty = propertyId,  // Asociar el trace a la propiedad
-                DateSale = DateTime.UtcNow,
-                Name = "Venta de propiedad",
-                Value = property.Price,
-                Tax = 15.0m
+                new PropertyTrace
+                {
+                    IdProperty = properties[0].IdProperty,
+                    DateSale = DateTime.UtcNow,
+                    Name = "Venta de propiedad",
+                    Value = properties[0].Price,
+                    Tax = 15.0m
+                },
+                new PropertyTrace
+                {
+                    IdProperty = properties[1].IdProperty,
+                    DateSale = DateTime.UtcNow,
+                    Name = "Venta de propiedad",
+                    Value = properties[1].Price,
+                    Tax = 10.0m
+                },
+                new PropertyTrace
+                {
+                    IdProperty = properties[2].IdProperty,
+                    DateSale = DateTime.UtcNow,
+                    Name = "Venta de propiedad",
+                    Value = properties[2].Price,
+                    Tax = 20.0m
+                },
+                new PropertyTrace
+                {
+                    IdProperty = properties[3].IdProperty,
+                    DateSale = DateTime.UtcNow,
+                    Name = "Venta de propiedad",
+                    Value = properties[3].Price,
+                    Tax = 18.0m
+                },
+                new PropertyTrace
+                {
+                    IdProperty = properties[4].IdProperty,
+                    DateSale = DateTime.UtcNow,
+                    Name = "Venta de propiedad",
+                    Value = properties[4].Price,
+                    Tax = 12.0m
+                }
             };
 
-            // Insertar el trace
-            await _propertyTraces.InsertOneAsync(propertyTrace);
+            // Insertar trazas
+            await _propertyTraces.InsertManyAsync(propertyTraces);
         }
     }
 }
