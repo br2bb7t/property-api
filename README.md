@@ -4,8 +4,11 @@
 
 Este proyecto es un backend para una aplicación de propiedades que utiliza MongoDB como base de datos y .NET 8 o 9 como framework. La API permite recuperar datos de propiedades desde MongoDB y filtrar estos datos por parámetros como nombre, dirección y rango de precios.
 
+---
+
 ![Diagrama-Secuencia](https://github.com/user-attachments/assets/56a901fc-9322-447d-8df3-e1ebeaf9be10)
 
+---
 
 ## Requisitos Previos
 - **Docker:** Asegúrate de tener Docker y Docker Compose instalados en tu máquina.
@@ -13,6 +16,9 @@ Este proyecto es un backend para una aplicación de propiedades que utiliza Mong
 
 ---
 
+![Diagrama-C4](https://github.com/user-attachments/assets/7d1769ca-55df-47a6-8a9e-aa8529336371)
+
+---
 ## Pasos para la Instalación
 
 ### 1. Clonar el Repositorio
